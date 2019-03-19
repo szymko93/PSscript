@@ -7,6 +7,7 @@ function Show-Menu {
     Write-Host "1: Wcisnij '1' aby wyswietlic USLUGI."
     Write-Host "2: Wcisnij '2' aby wyswietlic PROCESY."
     Write-Host "3: Wcisnij '3' aby dodac uzytkownika do grupy FL_BO."
+    Write-Host "4: Wcisnij '4' aby wyswietlic rozmiar baz danych BOXIAUDIT i BOXIREPO ."
     Write-Host "Q: Wcisnij 'Q' aby wyjsc."
 }
 do {
@@ -55,8 +56,13 @@ do {
                     }
                 }
             }   
-        }
-        'q' {
+        }'4'{
+            $server = 'sbop-test01'
+            $dbName1 = 'BOXIREPO4'
+            $dbName2 = 'BOXIAUDIT4'
+            Get-DbaDatabaseFreespace -SqlServer $server -database $dbName1, $dbname2  | select-Object Database, FileName, UsedSpace, FreeSpace, FileSize 
+        }'q' 
+        {
             return
         }
     }
