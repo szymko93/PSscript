@@ -1,4 +1,4 @@
-function Show-Menu {
+﻿function Show-Menu {
     param (
         [string]$Title = 'BOUtils'
     )
@@ -16,10 +16,10 @@ do {
     switch ($input) {
         '1' {
             cls
-            get-service -name *BO* -computername serwer-bo1, serwer-bo2 | Where-Object {$_.Status -eq "Running"}
+            get-service -name *BO* -computername serwer-bo1, serwer-bo2 | Where-Object {$_.Status -eq "Running"} | format-table
         }'2' {
             cls
-            Get-Process -ComputerName serwer-bo1, serwer-bo2 | Where-Object {($_.processName -match 'sia') -or ($_.processName -match 'tomcat8') -or ($_.processName -match 'CMS')}
+            Get-Process -ComputerName serwer-bo1, serwer-bo2 | Where-Object {($_.processName -match 'sia') -or ($_.processName -match 'tomcat8') -or ($_.processName -match 'CMS')} | format-table
         }'3' {
             cls
             $user = Read-Host "Podaj uzytkownika"
@@ -38,7 +38,7 @@ do {
             ForEach ($user in $users) {
                 Write-Host "================================="
                 If ($members -contains $user) {
-                    Write-Host "$usr nalezy do grupy $group"
+                    Write-Host "$usr nalezy juz do grupy $group"
                 } 
                 Else {
                     Write-Host "$usr NIE nalezy do grupy $group"
@@ -57,10 +57,10 @@ do {
                 }
             }   
         }'4'{
-            $server = 'sbop-test01'
             $dbName1 = 'BOXIREPO4'
             $dbName2 = 'BOXIAUDIT4'
-            Get-DbaDatabaseFreespace -SqlServer $server -database $dbName1, $dbname2  | select-Object Database, FileName, UsedSpace, FreeSpace, FileSize 
+            Get-DbaDbSpace -SqlServer sbop-test01 -database $dbName1, $dbName2 | select-Object Database, UsedSpace, FreeSpace, FileSize | format-table
+            
         }'q' 
         {
             return
