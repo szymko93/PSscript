@@ -7,7 +7,8 @@
     Write-Host "1: Wcisnij '1' aby wyswietlic USLUGI."
     Write-Host "2: Wcisnij '2' aby wyswietlic PROCESY."
     Write-Host "3: Wcisnij '3' aby dodac uzytkownika do grupy FL_BO."
-    Write-Host "4: Wcisnij '4' aby wyswietlic rozmiar baz danych BOXIAUDIT i BOXIREPO ."
+    Write-Host "4: Wcisnij '4' aby wyswietlic rozmiar baz danych BOXIAUDIT i BOXIREPO."
+    Write-Host "5: Wcisnij '5' aby wyswietlic logowania uzytkownika."
     Write-Host "Q: Wcisnij 'Q' aby wyjsc."
 }
 do {
@@ -15,13 +16,13 @@ do {
     $input = Read-Host "DOKONAJ WYBORU..."
     switch ($input) {
         '1' {
-            cls
+            clear
             get-service -name *BO* -computername serwer-bo1, serwer-bo2 | Where-Object {$_.Status -eq "Running"} | format-table
         }'2' {
-            cls
+            clear
             Get-Process -ComputerName serwer-bo1, serwer-bo2 | Where-Object {($_.processName -match 'sia') -or ($_.processName -match 'tomcat8') -or ($_.processName -match 'CMS')} | format-table
         }'3' {
-            cls
+            clear
             $user = Read-Host "Podaj uzytkownika"
                 
             $SamAccountName = 'doesNotExist'
@@ -61,6 +62,11 @@ do {
             $dbName2 = 'BOXIAUDIT4'
             Get-DbaDbSpace -SqlServer sbop-test01 -database $dbName1, $dbName2 | select-Object Database, UsedSpace, FreeSpace, FileSize | format-table
             
+        }'5'{
+            $SqlServer = Read-Host "Enter SQL Server Instance name:"
+            $SqlQuery = "SELECT TOP (50) [User_Name],[Object_Name] FROM dbo.ADS_EVENT" 
+            $SqlDatabase = Read-Host "Enter SQL Database name:"
+            Invoke-Sqlcmd -ServerInstance $SqlServer -Database $SqlDatabase -Query $SqlQuery | format-table
         }'q' 
         {
             return
